@@ -1,3 +1,4 @@
+Copyright (c) 2018 Brian L. Troutwine
 Copyright (c) 2014 J.C. Moyer
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

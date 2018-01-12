@@ -23,38 +23,18 @@
 //! Rust bindings for Lua 5.3 and beyond documentation.
 //! Original Lua library documentation [here](https://www.lua.org/manual/5.3/).
 
-#![crate_name = "lua"]
+#![crate_name = "mond"]
 #![crate_type = "lib"]
 
-pub extern crate libc;
 #[macro_use]
 extern crate bitflags;
+pub extern crate libc;
 
-pub use wrapper::state::{
-  State,
-  Extra,
+pub use wrapper::state::{Arithmetic, Comparison, Extra, GcOption, HookMask, Library, Reference,
+                         State, ThreadStatus, Type, MULTRET, NOREF, REFNIL, REGISTRYINDEX,
+                         RIDX_GLOBALS, RIDX_MAINTHREAD};
 
-  Arithmetic,
-  Comparison,
-  ThreadStatus,
-  GcOption,
-  Type,
-  Library,
-
-  Reference,
-  REFNIL, NOREF,
-
-  HookMask,
-  MASKCALL, MASKRET, MASKLINE, MASKCOUNT,
-
-  MULTRET, REGISTRYINDEX,
-  RIDX_MAINTHREAD, RIDX_GLOBALS
-};
-
-pub use wrapper::convert::{
-  ToLua,
-  FromLua
-};
+pub use wrapper::convert::{FromLua, ToLua};
 
 pub use ffi::lua_Number as Number;
 pub use ffi::lua_Integer as Integer;

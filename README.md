@@ -1,45 +1,10 @@
-# rust-lua53 [![Build Status](https://travis-ci.org/jcmoyer/rust-lua53.svg?branch=master)](https://travis-ci.org/jcmoyer/rust-lua53) [![Documentation](https://docs.rs/lua/badge.svg)](https://docs.rs/lua)
-Aims to be complete Rust bindings for Lua 5.3 and beyond. Currently, `master`
-is tracking Lua `5.3.3`.
+# mond [![Build Status](https://travis-ci.org/blt/mond.svg?branch=master)](https://travis-ci.org/blt/mond) [![Documentation](https://docs.rs/mond/badge.svg)](https://docs.rs/mond)
+Aims to be a complete Lua 5.3. We currently embed Lua 5.3.3.
 
-Requires a Unix-like environment. On Windows, [MSYS2](https://msys2.github.io/)
-is supported.
+Right now this is just for the [cernan](https://github.com/postmates/cernan)
+project. Please enjoy responsibly.
 
-You will need:
-- wget (fetch on FreeBSD/Dragonfly, curl on MacOS)
-- tar
-- make
-- gcc
-
-### Using crates.io
-
-Add this to your `Cargo.toml`:
-
-```
-[dependencies]
-lua = "*"
-```
-
-### Using git
-
-Add this to your `Cargo.toml`:
-
-```
-[dependencies.lua]
-git = "https://github.com/jcmoyer/rust-lua53"
-```
-
-# Example
-
-```rust
-extern crate lua;
-
-fn main() {
-  let mut state = lua::State::new();
-  state.open_libs();
-  state.do_string("print('hello world!')");
-}
-```
+Forked from [jcmoyer/rust-lua53](https://github.com/jcmoyer/rust-lua53/).
 
 # License
 Licensed under the MIT License, which is the same license Lua is distributed

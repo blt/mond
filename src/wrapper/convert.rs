@@ -22,74 +22,74 @@
 
 //! Implements conversions for Rust types to and from Lua.
 
-use ::{State, Integer, Number, Function, Index};
+use {Function, Index, Integer, Number, State};
 
 /// Trait for types that can be pushed onto the stack of a Lua state.
 ///
 /// It is important that implementors of this trait ensure that `to_lua`
 /// behaves like one of the `lua_push*` functions for consistency.
 pub trait ToLua {
-  /// Pushes a value of type `Self` onto the stack of a Lua state.
-  fn to_lua(&self, state: &mut State);
+    /// Pushes a value of type `Self` onto the stack of a Lua state.
+    fn to_lua(&self, state: &mut State);
 }
 
 impl<'a> ToLua for &'a str {
-  fn to_lua(&self, state: &mut State) {
-    state.push_string(*self);
-  }
+    fn to_lua(&self, state: &mut State) {
+        state.push_string(*self);
+    }
 }
 
 impl<'a> ToLua for &'a [u8] {
-  fn to_lua(&self, state: &mut State) {
-    state.push_bytes(*self);
-  }
+    fn to_lua(&self, state: &mut State) {
+        state.push_bytes(*self);
+    }
 }
 
 impl ToLua for String {
-  fn to_lua(&self, state: &mut State) {
-    state.push_string(&self);
-  }
+    fn to_lua(&self, state: &mut State) {
+        state.push_string(self);
+    }
 }
 
 impl ToLua for Integer {
-  fn to_lua(&self, state: &mut State) {
-    state.push_integer(*self)
-  }
+    fn to_lua(&self, state: &mut State) {
+        state.push_integer(*self)
+    }
 }
 
 impl ToLua for Number {
-  fn to_lua(&self, state: &mut State) {
-    state.push_number(*self)
-  }
+    fn to_lua(&self, state: &mut State) {
+        state.push_number(*self)
+    }
 }
 
 impl ToLua for bool {
-  fn to_lua(&self, state: &mut State) {
-    state.push_bool(*self)
-  }
+    fn to_lua(&self, state: &mut State) {
+        state.push_bool(*self)
+    }
 }
 
 impl ToLua for Function {
-  fn to_lua(&self, state: &mut State) {
-    state.push_fn(*self)
-  }
+    fn to_lua(&self, state: &mut State) {
+        state.push_fn(*self)
+    }
 }
 
 //#[unstable(reason="this is an experimental trait")]
 impl<T> ToLua for *mut T {
-  fn to_lua(&self, state: &mut State) {
-    unsafe { state.push_light_userdata(*self) }
-  }
+    fn to_lua(&self, state: &mut State) {
+        unsafe { state.push_light_userdata(*self) }
+    }
 }
 
 //#[unstable(reason="this is an experimental trait")]
 impl<T: ToLua> ToLua for Option<T> {
-  fn to_lua(&self, state: &mut State) {
-    match *self {
-      Some(ref value) => value.to_lua(state),
-      None            => state.push_nil(),
+    fn to_lua(&self, state: &mut State) {
+        match *self {
+            Some(ref value) => value.to_lua(state),
+            None => state.push_nil(),
+        }
     }
-  }
 }
 
 /// Trait for types that can be taken from the Lua stack.
@@ -97,60 +97,60 @@ impl<T: ToLua> ToLua for Option<T> {
 /// It is important that implementors of this trait ensure that `from_lua`
 /// behaves like one of the `lua_to*` functions for consistency.
 pub trait FromLua: Sized {
-  /// Converts the value on top of the stack of a Lua state to a value of type
-  /// `Option<Self>`.
-  fn from_lua(state: &mut State, index: Index) -> Option<Self>;
+    /// Converts the value on top of the stack of a Lua state to a value of type
+    /// `Option<Self>`.
+    fn from_lua(state: &mut State, index: Index) -> Option<Self>;
 }
 
 impl FromLua for String {
-  fn from_lua(state: &mut State, index: Index) -> Option<String> {
-    state.to_str(index).map(ToOwned::to_owned)
-  }
+    fn from_lua(state: &mut State, index: Index) -> Option<String> {
+        state.to_str(index).map(ToOwned::to_owned)
+    }
 }
 
 impl FromLua for Vec<u8> {
-  fn from_lua(state: &mut State, index: Index) -> Option<Vec<u8>> {
-    state.to_bytes_in_place(index).map(ToOwned::to_owned)
-  }
+    fn from_lua(state: &mut State, index: Index) -> Option<Vec<u8>> {
+        state.to_bytes_in_place(index).map(ToOwned::to_owned)
+    }
 }
 
 impl FromLua for Integer {
-  fn from_lua(state: &mut State, index: Index) -> Option<Integer> {
-    if state.is_integer(index) {
-      Some(state.to_integer(index))
-    } else {
-      None
+    fn from_lua(state: &mut State, index: Index) -> Option<Integer> {
+        if state.is_integer(index) {
+            Some(state.to_integer(index))
+        } else {
+            None
+        }
     }
-  }
 }
 
 impl FromLua for Number {
-  fn from_lua(state: &mut State, index: Index) -> Option<Number> {
-    if state.is_number(index) {
-      Some(state.to_number(index))
-    } else {
-      None
+    fn from_lua(state: &mut State, index: Index) -> Option<Number> {
+        if state.is_number(index) {
+            Some(state.to_number(index))
+        } else {
+            None
+        }
     }
-  }
 }
 
 impl FromLua for bool {
-  fn from_lua(state: &mut State, index: Index) -> Option<bool> {
-    if state.is_bool(index) {
-      Some(state.to_bool(index))
-    } else {
-      None
+    fn from_lua(state: &mut State, index: Index) -> Option<bool> {
+        if state.is_bool(index) {
+            Some(state.to_bool(index))
+        } else {
+            None
+        }
     }
-  }
 }
 
 //#[unstable(reason="this is an experimental trait")]
 impl FromLua for Function {
-  fn from_lua(state: &mut State, index: Index) -> Option<Function> {
-    if state.is_native_fn(index) {
-      Some(state.to_native_fn(index))
-    } else {
-      None
+    fn from_lua(state: &mut State, index: Index) -> Option<Function> {
+        if state.is_native_fn(index) {
+            Some(state.to_native_fn(index))
+        } else {
+            None
+        }
     }
-  }
 }

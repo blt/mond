@@ -1,12 +1,10 @@
 language: rust
-rust: nightly
-env:
-  global:
-    - secure: XvYTUR5JGOQ+RcWEu4wkgbwZix7f+8n09JORdKH0cYIj68Em0KOX9oXm0VFwfrjhas9Mb8IhBxOdOJP5xzCRSjARA8Qu91ZA/ZPnN/hcARm/rqG737qPM5IRlxA6+nl5hvkRC7hA2OjpA4wrUJtrcOfZvF/UFVKOJ328dpWJ9bA=
+cache: cargo
+rust:
+  - stable
+  - beta
+  - nightly
+
 script:
-  - cargo build --verbose
-  - cargo test --verbose
-  - cargo doc --verbose
-after_script:
-  - cp -R target/doc doc
-  - curl http://www.rust-ci.org/artifacts/put?t=$RUSTCI_TOKEN | sh
+  - cargo clean
+  - cargo test
