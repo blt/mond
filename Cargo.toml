@@ -1,6 +1,6 @@
 [package]
 name = "mond"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Brian L. Troutwine", "J.C. Moyer"]
 description = "A Rust Lua 5.3"
 documentation = "https://docs.rs/mond"
